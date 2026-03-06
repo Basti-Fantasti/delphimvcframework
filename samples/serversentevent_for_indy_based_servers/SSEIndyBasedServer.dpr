@@ -1,4 +1,4 @@
-program SSESample;
+program SSEIndyBasedServer;
 
 {$APPTYPE CONSOLE}
 
@@ -26,8 +26,8 @@ procedure RunServer(APort: Integer);
 var
   LServer: TIdHTTPWebBrokerBridge;
 begin
-  LogI('** DMVCFramework Server ** build ' + DMVCFRAMEWORK_VERSION);
-  LogI(Format('Starting HTTP Server on port %d', [APort]));
+  Writeln('** DMVCFramework Server ** build ' + DMVCFRAMEWORK_VERSION);
+  Writeln(Format('Starting HTTP Server on port %d', [APort]));
   LServer := TIdHTTPWebBrokerBridge.Create(nil);
   try
     LServer.KeepAlive := True;
@@ -38,7 +38,7 @@ begin
 {$IFDEF MSWINDOWS}
     ShellExecute(0, 'open', PChar('http://localhost:' + IntToStr(APort) + '/static'), nil, nil, SW_SHOWMAXIMIZED);
 {$ENDIF}
-    LogI('CTRL+C to stop the server');
+    Write('CTRL+C to stop the server');
     WaitForTerminationSignal;
     EnterInShutdownState;
   finally
@@ -49,7 +49,6 @@ end;
 begin
   ReportMemoryLeaksOnShutdown := True;
   IsMultiThread := True;
-  UseConsoleLogger := True;
   try
     if WebRequestHandler <> nil then
       WebRequestHandler.WebModuleClass := WebModuleClass;
@@ -57,7 +56,7 @@ begin
     RunServer(8080);
   except
     on E: Exception do
-      LogE(E.ClassName + ': ' + E.Message);
+      Writeln(E.ClassName, ': ', E.Message);
   end;
 
 end.
